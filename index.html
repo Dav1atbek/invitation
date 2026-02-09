@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ты и Я - Наша История</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #FF2E63;
+            --secondary: #08D9D6;
+            --accent: #FFC107;
+            --dark: #252A34;
+            --light: #EAEAEA;
+            --success: #00C853;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 1; }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Вступительный экран */
+        .intro-screen {
+            text-align: center;
+            padding: 60px 20px;
+            animation: fadeIn 2s ease;
+        }
+
+        .title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 4.5rem;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 40px;
+            color: var(--light);
+            opacity: 0.9;
+        }
+
+        .start-btn {
+            background: linear-gradient(45deg, var(--primary), #FF4081);
+            color: white;
+            border: none;
+            padding: 18px 50px;
+            font-size: 1.3rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: 0 10px 30px rgba(255, 46, 99, 0.4);
+            font-weight: 600;
+        }
+
+        .start-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(255, 46, 99, 0.6);
+        }
+
+        /* Экран с вопросом */
+        .question-screen {
+            display: none;
+            text-align: center;
+            padding: 60px 20px;
+            animation: slideUp 1s ease;
+        }
+
+        .question-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            padding: 50px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 40px;
+        }
+
+        .question {
+            font-size: 2.2rem;
+            margin-bottom: 30px;
+            line-height: 1.4;
+            color: white;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 20px 45px;
+            font-size: 1.4rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            font-weight: 600;
+            min-width: 200px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .yes-btn {
+            background: linear-gradient(45deg, var(--success), #00E676);
+            color: white;
+            box-shadow: 0 10px 30px rgba(0, 200, 83, 0.4);
+        }
+
+        .no-btn {
+            background: linear-gradient(45deg, #FF5252, #FF4081);
+            color: white;
+            box-shadow: 0 10px 30px rgba(255, 82, 82, 0.4);
+        }
+
+        .btn:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Экран убеждения */
+        .persuasion-screen {
+            display: none;
+            text-align: center;
+            padding: 60px 20px;
+            animation: fadeIn 1s ease;
+        }
+
+        .persuasion-card {
+            background: rgba(255, 193, 7, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            padding: 50px;
+            box-shadow: 0 20px 50px rgba(255, 193, 7, 0.2);
+            border: 2px solid var(--accent);
+            margin-bottom: 40px;
+        }
+
+        .persuasion-text {
+            font-size: 2rem;
+            margin-bottom: 30px;
+            line-height: 1.4;
+            color: #FFE082;
+        }
+
+        /* Финальный экран */
+        .final-screen {
+            display: none;
+            text-align: center;
+            padding: 80px 20px;
+            animation: zoomIn 1s ease;
+        }
+
+        .final-card {
+            background: rgba(0, 200, 83, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            padding: 60px;
+            box-shadow: 0 25px 60px rgba(0, 200, 83, 0.3);
+            border: 2px solid var(--success);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .celebration {
+            font-size: 5rem;
+            margin-bottom: 30px;
+            animation: bounce 2s infinite;
+        }
+
+        .final-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 4rem;
+            margin-bottom: 30px;
+            color: #C8E6C9;
+        }
+
+        .final-message {
+            font-size: 1.8rem;
+            margin-bottom: 40px;
+            line-height: 1.6;
+            color: white;
+        }
+
+        /* Финальная кнопка ДА */
+        .final-yes-btn {
+            background: linear-gradient(45deg, var(--success), #69F0AE);
+            color: white;
+            border: none;
+            padding: 25px 70px;
+            font-size: 1.8rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: 0 15px 40px rgba(0, 200, 83, 0.5);
+            font-weight: 700;
+            animation: pulse 2s infinite;
+            margin-top: 30px;
+        }
+
+        .final-yes-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 20px 50px rgba(0, 200, 83, 0.7);
+        }
+
+        /* Эффекты кнопки НЕТ */
+        .no-btn.running {
+            animation: runAway 0.5s forwards;
+        }
+
+        .no-btn.disappearing {
+            animation: disappear 0.5s forwards;
+        }
+
+        .no-btn.small {
+            transform: scale(0.5);
+            opacity: 0.5;
+        }
+
+        /* Анимации */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes zoomIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes runAway {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(100vw); }
+        }
+
+        @keyframes disappear {
+            0% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0); }
+        }
+
+        /* Прогресс бар */
+        .progress-container {
+            width: 80%;
+            max-width: 600px;
+            height: 10px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 5px;
+            margin: 40px auto;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            width: 0%;
+            transition: width 0.5s ease;
+            border-radius: 5px;
+        }
+
+        /* Конфетти */
+        .confetti {
+            position: fixed;
+            width: 15px;
+            height: 15px;
+            background: var(--primary);
+            animation: fall 5s linear forwards;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .title {
+                font-size: 3rem;
+            }
+            
+            .question, .persuasion-text {
+                font-size: 1.6rem;
+            }
+            
+            .final-title {
+                font-size: 2.8rem;
+            }
+            
+            .btn {
+                min-width: 160px;
+                padding: 15px 30px;
+                font-size: 1.2rem;
+            }
+            
+            .final-yes-btn {
+                padding: 20px 50px;
+                font-size: 1.5rem;
+            }
+            
+            .question-card, .persuasion-card, .final-card {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Звёзды на фоне -->
+    <div id="stars-container"></div>
+    
+    <!-- Конфетти -->
+    <div id="confetti-container"></div>
+    
+    <div class="container">
+        <!-- Вступительный экран -->
+        <div class="intro-screen" id="intro-screen">
+            <h1 class="title">Наша История Начинается...</h1>
+            <p class="subtitle">Просто следуй за сердцем 💖</p>
+            <button class="start-btn" id="start-btn">
+                <i class="fas fa-play-circle"></i> Начать путешествие
+            </button>
+        </div>
+        
+        <!-- Экран с вопросом -->
+        <div class="question-screen" id="question-screen">
+            <div class="question-card">
+                <h2 class="question" id="question-text">
+                    Дорогая, я верю, что некоторые встречи предопределены судьбой. 
+                    Ты согласна подарить нам шанс и пойти со мной на свидание?
+                </h2>
+                
+                <div class="progress-container">
+                    <div class="progress-bar" id="progress-bar"></div>
+                </div>
+                
+                <div class="buttons">
+                    <button class="btn yes-btn" id="yes-btn">
+                        <i class="fas fa-heart"></i> Да, конечно!
+                    </button>
+                    <button class="btn no-btn" id="no-btn">
+                        <i class="fas fa-times"></i> Нет
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Экран убеждения -->
+        <div class="persuasion-screen" id="persuasion-screen">
+            <div class="persuasion-card">
+                <h2 class="persuasion-text" id="persuasion-text">
+                    Подожди... Ты действительно хочешь отказаться от возможности 
+                    пережить самый волшебный вечер в твоей жизни?
+                </h2>
+                
+                <div class="buttons">
+                    <button class="btn yes-btn" id="persuasion-yes-btn">
+                        <i class="fas fa-check-circle"></i> Ты прав, я согласна!
+                    </button>
+                    <button class="btn no-btn" id="persuasion-no-btn">
+                        <i class="fas fa-times-circle"></i> Всё равно нет
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Финальный экран -->
+        <div class="final-screen" id="final-screen">
+            <div class="final-card">
+                <div class="celebration">
+                    <i class="fas fa-crown"></i>
+                </div>
+                <h2 class="final-title">Ты сделала правильный выбор!</h2>
+                <p class="final-message" id="final-message">
+                    Я знал, что ты умная девушка! Этот вечер станет началом 
+                    чего-то по-настоящему волшебного. Я приготовил для тебя 
+                    незабываемый сюрприз!
+                </p>
+                
+                <button class="final-yes-btn" id="final-yes-btn">
+                    <i class="fas fa-check-double"></i> ДА, Я ХОЧУ ЭТОГО!
+                </button>
+                
+                <p style="margin-top: 30px; color: #C8E6C9; font-size: 1.2rem;">
+                    Нажми кнопку, чтобы подтвердить своё решение 🔥
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Элементы
+            const introScreen = document.getElementById('intro-screen');
+            const questionScreen = document.getElementById('question-screen');
+            const persuasionScreen = document.getElementById('persuasion-screen');
+            const finalScreen = document.getElementById('final-screen');
+            
+            // Кнопки
+            const startBtn = document.getElementById('start-btn');
+            const yesBtn = document.getElementById('yes-btn');
+            const noBtn = document.getElementById('no-btn');
+            const persuasionYesBtn = document.getElementById('persuasion-yes-btn');
+            const persuasionNoBtn = document.getElementById('persuasion-no-btn');
+            const finalYesBtn = document.getElementById('final-yes-btn');
+            
+            // Тексты
+            const questionText = document.getElementById('question-text');
+            const persuasionText = document.getElementById('persuasion-text');
+            const finalMessage = document.getElementById('final-message');
+            const progressBar = document.getElementById('progress-bar');
+            
+            // Данные
+            let refusalCount = 0;
+            const questions = [
+                "Дорогая, я верю, что некоторые встречи предопределены судьбой. Ты согласна подарить нам шанс и пойти со мной на свидание?",
+                "Я чувствую, что между нами есть особая связь. Давай дадим ей шанс расцвести?",
+                "Жизнь слишком коротка, чтобы отказываться от волшебства. Позволь мне показать тебе магию этого вечера?",
+                "Я видел, как ты улыбаешься, и понял — я хочу видеть эту улыбку всегда. Дай мне шанс?"
+            ];
+            
+            const persuasionMessages = [
+                "Подожди... Ты действительно хочешь отказаться от возможности пережить самый волшебный вечер в твоей жизни?",
+                "Уверена? Иногда один 'да' может изменить всю жизнь к лучшему!",
+                "Я вижу сомнение в твоих глазах... Дай нам этот шанс, обещаю — не пожалеешь!",
+                "Последний раз спрашиваю... Ты готова к приключению всей своей жизни?"
+            ];
+            
+            const finalMessages = [
+                "Я знал, что ты умная девушка! Этот вечер станет началом чего-то по-настоящему волшебного.",
+                "Ты сделала лучший выбор в своей жизни! Готовься к незабываемым эмоциям!",
+                "Браво! Ты только что открыла дверь в самую прекрасную историю любви!",
+                "Поздравляю с правильным решением! Начинается твоя сказка!"
+            ];
+            
+            // Создаем звёзды
+            function createStars() {
+                const starsContainer = document.getElementById('stars-container');
+                for(let i = 0; i < 100; i++) {
+                    const star = document.createElement('div');
+                    star.classList.add('star');
+                    star.style.width = star.style.height = `${Math.random() * 3 + 1}px`;
+                    star.style.left = `${Math.random() * 100}%`;
+                    star.style.top = `${Math.random() * 100}%`;
+                    star.style.animationDelay = `${Math.random() * 3}s`;
+                    starsContainer.appendChild(star);
+                }
+            }
+            
+            // Создаем конфетти
+            function createConfetti(count) {
+                const container = document.getElementById('confetti-container');
+                const colors = ['#FF2E63', '#08D9D6', '#FFC107', '#00C853'];
+                
+                for(let i = 0; i < count; i++) {
+                    const confetti = document.createElement('div');
+                    confetti.classList.add('confetti');
+                    confetti.style.left = `${Math.random() * 100}%`;
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.width = `${Math.random() * 10 + 5}px`;
+                    confetti.style.height = `${Math.random() * 10 + 5}px`;
+                    confetti.style.animationDelay = `${Math.random() * 2}s`;
+                    container.appendChild(confetti);
+                    
+                    // Удаляем через 5 секунд
+                    setTimeout(() => confetti.remove(), 5000);
+                }
+            }
+            
+            // Обновляем прогресс бар
+            function updateProgress() {
+                const progress = Math.min((refusalCount / 4) * 100, 100);
+                progressBar.style.width = `${progress}%`;
+            }
+            
+            // Эффект для кнопки "Нет"
+            function applyNoButtonEffect(button) {
+                refusalCount++;
+                updateProgress();
+                
+                // Случайный эффект для кнопки "Нет"
+                const effects = ['running', 'disappearing', 'small'];
+                const randomEffect = effects[Math.floor(Math.random() * effects.length)];
+                
+                button.classList.add(randomEffect);
+                
+                // Возвращаем кнопку через секунду
+                setTimeout(() => {
+                    button.classList.remove('running', 'disappearing', 'small');
+                    button.style.display = 'block';
+                    button.style.transform = '';
+                    button.style.opacity = '';
+                }, 1000);
+            }
+            
+            // Показываем экран убеждения
+            function showPersuasionScreen() {
+                refusalCount++;
+                updateProgress();
+                
+                // Меняем основной вопрос
+                if(refusalCount <= questions.length) {
+                    questionText.textContent = questions[refusalCount - 1];
+                }
+                
+                // Меняем текст убеждения
+                const persuasionIndex = Math.min(refusalCount - 1, persuasionMessages.length - 1);
+                persuasionText.textContent = persuasionMessages[persuasionIndex];
+                
+                // Переключаем экраны
+                questionScreen.style.display = 'none';
+                persuasionScreen.style.display = 'block';
+                
+                // Создаем конфетти
+                createConfetti(20);
+            }
+            
+            // Показываем финальный экран
+            function showFinalScreen() {
+                const randomMessage = finalMessages[Math.floor(Math.random() * finalMessages.length)];
+                finalMessage.textContent = randomMessage;
+                
+                persuasionScreen.style.display = 'none';
+                finalScreen.style.display = 'block';
+                
+                // Много конфетти!
+                createConfetti(100);
+                
+                // Автоматически нажимаем финальную кнопку через 3 секунды
+                setTimeout(() => {
+                    finalYesBtn.style.animation = 'none';
+                    setTimeout(() => {
+                        finalYesBtn.style.animation = 'pulse 1s infinite';
+                    }, 10);
+                }, 3000);
+            }
+            
+            // Обработчики событий
+            startBtn.addEventListener('click', function() {
+                introScreen.style.display = 'none';
+                questionScreen.style.display = 'block';
+                createStars();
+            });
+            
+            yesBtn.addEventListener('click', showFinalScreen);
+            
+            noBtn.addEventListener('click', function() {
+                applyNoButtonEffect(noBtn);
+                
+                if(refusalCount >= 3) {
+                    // После 3 отказов показываем экран убеждения
+                    setTimeout(showPersuasionScreen, 1000);
+                } else if(refusalCount >= 6) {
+                    // После 6 отказов сразу показываем финальный экран
+                    setTimeout(showFinalScreen, 1000);
+                }
+            });
+            
+            persuasionYesBtn.addEventListener('click', showFinalScreen);
+            
+            persuasionNoBtn.addEventListener('click', function() {
+                applyNoButtonEffect(persuasionNoBtn);
+                
+                if(refusalCount >= 8) {
+                    // После 8 отказов скрываем кнопку "Нет" и оставляем только "Да"
+                    persuasionNoBtn.style.display = 'none';
+                    persuasionText.textContent = "Вижу, ты упрямая... Но я тоже! И я оставляю тебе только один вариант — сказать ДА!";
+                } else if(refusalCount >= 10) {
+                    // После 10 отказов автоматически переходим к финалу
+                    setTimeout(showFinalScreen, 1000);
+                } else {
+                    // Показываем следующее убеждающее сообщение
+                    setTimeout(() => {
+                        const persuasionIndex = Math.min(refusalCount - 1, persuasionMessages.length - 1);
+                        persuasionText.textContent = persuasionMessages[persuasionIndex];
+                    }, 1000);
+                }
+            });
+            
+            finalYesBtn.addEventListener('click', function() {
+                // Эффект при нажатии на финальную кнопку
+                finalYesBtn.innerHTML = '<i class="fas fa-heart"></i> ВЫ ПРЕКРАСНЫ!';
+                finalYesBtn.style.background = 'linear-gradient(45deg, #FF4081, #FF2E63)';
+                finalYesBtn.style.animation = 'bounce 0.5s';
+                
+                // Ещё больше конфетти!
+                createConfetti(200);
+                
+                // Показываем финальное сообщение
+                setTimeout(() => {
+                    finalMessage.innerHTML = `
+                        <h3 style="color: #69F0AE; margin-bottom: 20px;">🎉 СВИДАНИЕ ЗАБРОНИРОВАНО! 🎉</h3>
+                        <p><i class="fas fa-calendar"></i> СУББОТА, 19:00</p>
+                        <p><i class="fas fa-map-marker-alt"></i> СЕКРЕТНОЕ МЕСТО (адрес придёт за час до встречи)</p>
+                        <p><i class="fas fa-star"></i> ДРЕСС-КОД: Твой самый очаровательный образ</p>
+                        <p style="margin-top: 20px; color: #FFE082;">Я уже с нетерпением жду этой встречи! 💖</p>
+                    `;
+                }, 1000);
+            });
+            
+            // Инициализация
+            createStars();
+        });
+    </script>
+</body>
+</html>
